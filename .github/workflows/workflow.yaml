@@ -3,7 +3,7 @@ name: Terraform infra plan
 on:
   pull_request:
     paths:
-      - 'terraform/aws/us-east-1/production/*.tf*'
+      - 'terraform/aws/us-east-1/**/*.tf*'
 
 
 env:
