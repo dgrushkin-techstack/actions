@@ -8,7 +8,7 @@ terraform {
   backend "s3" {
     region         = "us-east-1"
     bucket         = "sc-ue1-prod-terraform-state"
-    key            = "terraform.tfstate"
+    key            = "terraform.tfstate-debug"
     dynamodb_table = "sc-ue1-prod-terraform-state-lock"
     profile        = "showclix"
     role_arn       = ""
