@@ -18,12 +18,17 @@ jobs:
       run:
         working-directory: terraform/aws/${{ matrix.regions }}/${{ matrix.envs }}
     steps:
-      - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
-      - uses: hashicorp/setup-terraform@97360ea1641076c763cc0b38c4e673ffc686b42c
-      - run: terraform init
-      - run: terraform plan
+      - name: checkout
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+      - name: setup tf
+        uses: hashicorp/setup-terraform@97360ea1641076c763cc0b38c4e673ffc686b42c
+      - name: init
+        run: terraform init
+      - name: plan
+        run: terraform plan -out workspace.plan
         id: plan
-      - uses: robburger/terraform-pr-commenter@v1
+      - name: comment
+        uses: robburger/terraform-pr-commenter@v1
         with:
           commenter_type: plan
           commenter_input: ${{ format('{0}{1}', steps.plan.outputs.stdout, steps.plan.outputs.stderr) }}
