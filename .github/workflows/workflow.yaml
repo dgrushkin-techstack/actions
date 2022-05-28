@@ -28,11 +28,9 @@ jobs:
         run: terraform plan -out workspace.plan
         id: plan
       - name: comment
-        uses: robburger/terraform-pr-commenter@v1
+        uses: theappnest/terraform-plan-comment-action@3fbaf59b753c1688dfe549be4a14fddb7a497a69
         with:
-          commenter_type: plan
-          commenter_input: ${{ format('{0}{1}', steps.plan.outputs.stdout, steps.plan.outputs.stderr) }}
-          commenter_exitcode: ${{ steps.plan.outputs.exitcode }}
+          plan: ${{ steps.plan.outputs.stdout }}
 #      - uses: theappnest/create-artifact-action@5ce25c02358af7c7f81fb297bd2b5b621434dc77
 #        with:
 #          name: terraform-plan
