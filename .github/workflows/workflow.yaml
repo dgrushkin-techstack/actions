@@ -21,6 +21,12 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::707613674397:role/GitHubRole
+          role-session-name: samplerolesession
+          aws-region: ${{ env.AWS_REGION }}
       - name: setup tf
         uses: hashicorp/setup-terraform@97360ea1641076c763cc0b38c4e673ffc686b42c
       - name: init
