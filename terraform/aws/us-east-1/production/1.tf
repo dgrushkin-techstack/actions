@@ -9,7 +9,7 @@ terraform {
     region         = "us-east-1"
     bucket         = "sc-ue1-prod-terraform-state-debug"
     key            = "terraform.tfstate-debug"
-    dynamodb_table = "Tele"
+#    dynamodb_table = "Tele"
     profile        = ""
     role_arn       = ""
     encrypt        = "true"
