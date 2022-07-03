@@ -1,17 +1,23 @@
 name: Terraform infra plan
 
 on:
-  push
+  pull_request:
+    paths:
+      - 'terraform/aws/us-east-1/production/*.tf*'
 env:
-  BUCKET_NAME : "clearslide-dev-video"
   AWS_REGION : "us-west-2"
 
 permissions:
   id-token: write
   contents: read
 jobs:
-  S3PackageUpload:
+  terraform:
     runs-on: ubuntu-latest
+    strategy:
+      matrix: { regions: [ "us-east-1" ], envs: ["production"] }
+    defaults:
+      run:
+        working-directory: terraform/aws/${{ matrix.regions }}/${{ matrix.envs }}
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3
@@ -21,8 +27,14 @@ jobs:
           role-to-assume: arn:aws:iam::707613674397:role/GitHubRole
           role-session-name: samplerolesession
           aws-region: ${{ env.AWS_REGION }}
-      # Upload a file to AWS s3
-      - name:  Copy index.html to s3
-        run: |
-          touch action.txt
-          aws s3 cp action.txt s3://${{ env.BUCKET_NAME }}/
+      - name: setup tf
+        uses: hashicorp/setup-terraform@97360ea1641076c763cc0b38c4e673ffc686b42c
+      - name: init
+        run: terraform init
+      - name: plan
+        run: terraform plan -out workspace.plan
+        id: plan
+      - name: comment
+        uses: theappnest/terraform-plan-comment-action@3fbaf59b753c1688dfe549be4a14fddb7a497a69
+        with:
+          plan: ${{ steps.plan.outputs.stdout }}
