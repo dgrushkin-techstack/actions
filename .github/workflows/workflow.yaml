@@ -9,7 +9,7 @@ env:
 
 permissions:
   id-token: write
-  contents: read
+  contents: wrie
 jobs:
   terraform:
     runs-on: ubuntu-latest
